@@ -1,8 +1,8 @@
-<?php namespace AliasProject\SEMRush;
+<?php namespace AliasProject\GetHealthie;
 
 use Illuminate\Support\ServiceProvider;
 
-class SEMRushServiceProvider extends ServiceProvider {
+class GetHealthieServiceProvider extends ServiceProvider {
 
    /**
      * Bootstrap the application services.
@@ -12,7 +12,7 @@ class SEMRushServiceProvider extends ServiceProvider {
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/config/semrush.php' => config_path('semrush.php'),
+            __DIR__.'/config/gethealthie.php' => config_path('gethealthie.php'),
         ]);
     }
 
