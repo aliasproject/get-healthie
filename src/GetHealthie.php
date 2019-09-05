@@ -28,20 +28,20 @@ class GetHealthie
    */
   public function createClient(string $first_name, string $last_name, string $dob, string $phone, string $email, string $offering_id, float $amount, string $pdf = '')
   {
-    $data = json_encode([
+    $data = [
       'first_name' => $first_name,
       'last_name' => $last_name,
-      'dob' => $dob,
+      'dob' => date('Y-m-d', strtotime($dob)),
       'phone_number' => $phone,
       'email' => $email,
       'offering_id' => $offering_id,
-      'payment_amount' => $amount,
-      'datetime' => '',
+      'payment_amount' => number_format((float)$amount, 2, '.', ''),
+      'datetime' => time(),
       'base64_pdf_string' => $pdf,
       'provider_id' => $this->provider_id
-    ]);
+    ];
 
-    return $this->makeRequest($data, [], true);
+    return $this->makeRequest($data, ['Content-Type: application/json', 'Accept: */*'], true);
   }
 
   /**
@@ -52,17 +52,16 @@ class GetHealthie
    * @param bool $post
    * @return string
    */
-  private function makeRequest(string $data='', array $headers=[], bool $post=false)
+  private function makeRequest(array $data = [], array $headers=[], bool $post=false)
   {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, self::ENDPOINT);
     curl_setopt($ch, CURLOPT_POST, $post);
-    curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
     if ($post) {
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     }
 
     $result = curl_exec($ch);
